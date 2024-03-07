@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import datetime
 import json
+import os
 
 from .prompt_processor import PromptProcessor
 
@@ -34,7 +35,7 @@ class Evaluator(ABC):
             "results": results
         }
         
-        output_file_path = self._output_file_name()
+        output_file_path = self._output_file_path()
         
         with open(output_file_path, 'w') as file:
             json.dump(output, file)
@@ -62,6 +63,18 @@ class Evaluator(ABC):
             str: The name of the evaluator.
         """
         pass
+
+    def _output_file_path(self) -> str:
+        """
+        Generates the output file path based on the output file name.
+
+        Returns:
+            str: The output file path.
+        """
+        output_dir = "output"
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        return f"{output_dir}/{self._output_file_name()}"
 
     def _output_file_name(self) -> str:
         """
