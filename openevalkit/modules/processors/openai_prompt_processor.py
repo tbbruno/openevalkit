@@ -12,7 +12,7 @@ class OpenAIPromptProcessor(PromptProcessor):
         Get the identifier of the prompt processor.
 
         Returns:
-            str: The identifier of the prompt processor.
+            str: The model name as the identifier of the prompt processor.
         """
         return self._model_name
 
