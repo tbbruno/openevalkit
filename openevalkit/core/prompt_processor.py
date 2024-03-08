@@ -15,6 +15,17 @@ class PromptProcessor(ABC):
     to their specific needs and requirements.
     """
 
+    @property
+    @abstractmethod
+    def processor_identifier(self) -> str:
+        """
+        Get the identifier of the prompt processor.
+
+        Returns:
+            str: The identifier of the prompt processor.
+        """
+        pass
+
     @abstractmethod
     def process(self, prompt: str) -> str:
         """
