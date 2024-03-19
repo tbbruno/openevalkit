@@ -25,7 +25,9 @@ class MBPPCodeEvaluator(Evaluator):
         results = []
         successful_tasks = 0
         
-        for entry in self._dataset:
+        full_dataset_len = len(self._dataset)
+        for index, entry in enumerate(self._dataset):
+            print(f"MBPPCodeEvaluator - 🙋‍♂️ evaluating task {index + 1} of {full_dataset_len}")
             task_id = entry["task_id"]
             task_prompt = entry["prompt"]
             test_cases = entry["test_list"]
@@ -35,7 +37,8 @@ class MBPPCodeEvaluator(Evaluator):
             
             task_result = {
                 "task_id": task_id,
-                "generated_code": generated_code,
+                "prompt": task_prompt,
+                "processed_prompt_output": str(generated_code),
                 "successful": True,
                 "test_cases": []
             }
@@ -56,6 +59,9 @@ class MBPPCodeEvaluator(Evaluator):
             if task_result["successful"]:
                 successful_tasks += 1
             
+            print("MBPPCodeEvaluator - task_result: ", task_result)
+            print("MBPPCodeEvaluator - successful_tasks: ", successful_tasks)
+            print("\n\n")
             results.append(task_result)
         
         score = successful_tasks / len(self._dataset)

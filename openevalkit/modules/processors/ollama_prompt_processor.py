@@ -17,8 +17,10 @@ class OllamaPromptProcessor(PromptProcessor):
         self._model_name = model_name
         
         if system_prompt is not None:
-            modelfile = f"""FROM {self._model_name}
-            SYSTEM {system_prompt}"""
+            modelfile = f"FROM {self._model_name}\nSYSTEM \"\"\"{system_prompt}\"\"\""
+            print("\n\n")
+            print("OllamaPromptProcessor - modelfile: ", modelfile)
+            print("\n\n")
             self._model_name = f'{self._model_name}_custom'
             ollama.create(model=self._model_name, modelfile=modelfile)
 

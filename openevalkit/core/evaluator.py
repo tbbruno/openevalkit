@@ -27,6 +27,8 @@ class Evaluator(ABC):
         Evaluates the prompt processor and saves the results to a file.
         """
         score, results = self._evaluate()
+        print(f"Evaluator - score: {score}")
+        # print(f"Evaluator - results: {results}")
         
         output = {
             "evaluator": self.evaluator_name,
@@ -34,6 +36,7 @@ class Evaluator(ABC):
             "score": score,
             "results": results
         }
+        print(f"Evaluator - output: {output}\n\n\n")
         
         output_file_path = self._output_file_path()
         
@@ -84,4 +87,4 @@ class Evaluator(ABC):
             str: The output file name.
         """
         current_time = datetime.datetime.now().strftime("%H%M%S")
-        return f"{self.evaluator_name}-{self._prompt_processor.processor_identifier}-{current_time}.json"
+        return f"{current_time}-{self.evaluator_name}-{self._prompt_processor.processor_identifier}.json"

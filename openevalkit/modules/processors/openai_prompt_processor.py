@@ -2,9 +2,11 @@ from openai import OpenAI
 from openevalkit.core.prompt_processor import PromptProcessor
 
 class OpenAIPromptProcessor(PromptProcessor):
-    def __init__(self, api_key: str, model_name: str):
+    def __init__(self, api_key: str, model_name: str, system_prompt: str = None, json_mode: bool = False):
         self._client = OpenAI(api_key=api_key)
         self._model_name = model_name
+        self._system_prompt = system_prompt
+        self._json_mode = json_mode
 
     @property
     def processor_identifier(self) -> str:
@@ -18,12 +20,14 @@ class OpenAIPromptProcessor(PromptProcessor):
 
     def process(self, prompt: str) -> str:
         print("OpenAIPromptProcessor - prompt: ", prompt)
+        messages = []
+        if self._system_prompt:
+            messages.append({"role": "system", "content": self._system_prompt})
+        messages.append({"role": "user", "content": prompt})
         chat_completion = self._client.chat.completions.create(
             model=self._model_name,
-            messages=[
-                {"role": "system", "content": "You are a Python programmer. You'll be given a task and should produce Python code to execute this task. The output should be ONLY the code in plain text, without any surrounding tags."},
-                {"role": "user", "content": prompt}
-            ]
+            messages=messages,
+            response_format= { "type": "json_object" } if self._json_mode else { "type": "text" }
         )
         result = chat_completion.choices[0].message.content.strip()
         print("OpenAIPromptProcessor - result: ", result)
